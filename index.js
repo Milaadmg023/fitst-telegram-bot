@@ -27,16 +27,16 @@ bot.on("error", (err, ctx) => {
 bot.start((ctx) => ctx.reply("سلام! من یک ربات ساده هستم."));
 
 bot.command("song", async (ctx) => {
-  const filePath = "./au_uu_SzH34yR2.mp3";
-  //ctx.replyWithDocument({source : "./text.txt"})
-  await ctx.replyWithAudio({ source: filePath });
-
-  //ctx.replyWithAudio({source: fs.createReadStream(filePath)})
+  const response = await fetch("")
 });
 
 bot.on("text", async (ctx) => {
+  function replaceSpaces(text) {
+    return text.replace(/\s+/g, "+");
+  }
+  const songName = replaceSpaces(ctx.message.text);
   const response = await fetch(
-    `https://saavn.dev/search/songs?query=${ctx.message.text}`
+    `https://saavn.dev/search/songs?query=${songName}`
   );
   const data = await response.json();
   ctx.reply(data.data.results[0].name);
@@ -45,6 +45,7 @@ bot.on("text", async (ctx) => {
   request(url, { encoding: "binary" })
     .pipe(fs.createWriteStream(filePath))
     .on("finish", async() => {
+      ctx.reply('download finished')
       await ctx.replyWithAudio({source : filePath})
     });
 });
